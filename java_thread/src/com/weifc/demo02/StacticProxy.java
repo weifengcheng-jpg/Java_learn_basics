@@ -1,0 +1,57 @@
+package com.weifc.demo02;
+
+//静态代理模式总结:
+//真实对象和代理对象都要实现同一个接口
+//代理对象要代理真实角色
+public class StacticProxy {
+    public static void main(String[] args) {
+        You you = new You();
+
+        new Thread(()-> System.out.println("你好")).start();
+
+        new WeddingCompany(new You()).HappyMarry();
+
+//        You you = new You();
+//        WeddingCompany weddingCompany = new WeddingCompany(you);
+//        weddingCompany.HappyMarry();
+
+
+    }
+}
+
+interface Marry {
+    void HappyMarry();
+}
+
+//真实角色, 你去结婚
+class You implements Marry {
+    @Override
+    public void HappyMarry() {
+        System.out.println("超开心");
+    }
+}
+
+//代理角色, 帮助你结婚
+class WeddingCompany implements  Marry {
+    private Marry target;
+
+    public WeddingCompany(Marry target) {
+        this.target = target;
+    }
+
+    @Override
+    public void HappyMarry() {
+        before();
+        this.target.HappyMarry();
+        after();
+
+    }
+
+    private void before() {
+        System.out.println("结婚之前");
+    }
+
+    private void after() {
+        System.out.println("结婚之后");
+    }
+}
